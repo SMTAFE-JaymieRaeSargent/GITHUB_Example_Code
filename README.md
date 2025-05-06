@@ -69,7 +69,7 @@ Every github commit should start with one of the following words:
 - [ ]	Player stats, including experience points and level, will remain intact upon respawn, maintaining the player’s progression despite death.
 
 ## Work Allocation
-[Adding Tables](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/quickstart-for-writing-on-github#adding-a-table)).
+[Adding Tables](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/quickstart-for-writing-on-github#adding-a-table).
 
 | Feature                    | Priority | Team Member   | Order | Order Reason                                                                                      |
 |----------------------------|----------|---------------|-------|---------------------------------------------------------------------------------------------------|
