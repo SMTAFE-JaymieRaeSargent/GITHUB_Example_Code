@@ -84,4 +84,26 @@ public class SaveAndLoadOptions : MonoBehaviour
             LoadOptions();
         }
     }
+    public static void LoadOptionsGlobal()
+    {
+        if (File.Exists($"{Application.dataPath}/OptionsData.json"))
+        {
+            OptionSaveData tempData = new OptionSaveData();
+            string loadedData = File.ReadAllText($"{Application.dataPath}/OptionsData.json");
+            tempData = JsonUtility.FromJson<OptionSaveData>(loadedData);
+            for (int i = 0; i < tempData.keyNames.Length; i++)
+            {
+                KeybindManager.keys.Add(tempData.keyNames[i], (KeyCode)Enum.Parse(typeof(KeyCode), tempData.keyValues[i]));
+            }
+            MouseInvertManager.IsInverted = tempData.isMouseInverted;
+        }
+        //else if (File.Exists($"{Application.dataPath}/DefaultControls.json"))
+        //{
+        //    for (int i = 0; i < tempData.keyNames.Length; i++)
+        //    {
+        //        KeybindManager.keys.Add(tempData.keyNames[i], (KeyCode)Enum.Parse(typeof(KeyCode), tempData.keyValues[i]));
+        //    }
+        //    MouseInvertManager.IsInverted = tempData.isMouseInverted;
+        //}
+    }
 }
