@@ -34,7 +34,9 @@ public class SaveAndLoadOptions : MonoBehaviour
         optionsData.resolutionHeight = Screen.currentResolution.height;
         optionsData.currentResolutionIndex = _resolutionManager.CurrentResolution; 
 
-        optionsData.qualityLevel = QualitySettings.GetQualityLevel();
+        optionsData.qualityLevel = _qualityManager.CurrentQualityIndex;
+
+        optionsData.volume = _audioManager.VolumeControl;
 
     }
     void SaveJSON(OptionSaveData data)
@@ -66,8 +68,8 @@ public class SaveAndLoadOptions : MonoBehaviour
         _keybindManager.SetUpLoadedKeys(optionsData.keyNames, optionsData.keyValues);
         _resolutionManager.CurrentResolution = optionsData.currentResolutionIndex;
         _fullscreenModeManager.CurrentFullscreenMode = optionsData.fullScreenMode;
-        QualitySettings.SetQualityLevel(optionsData.qualityLevel);
-
+        _qualityManager.CurrentQualityIndex = optionsData.qualityLevel;
+        _audioManager.VolumeControl = optionsData.volume;
     }
     public void LoadOptions()
     {

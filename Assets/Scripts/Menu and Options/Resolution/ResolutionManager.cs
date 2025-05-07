@@ -8,7 +8,7 @@ using UnityEngine.UI;// Enables interaction with Unity's built-in UI system, all
 /// </summary>
 public class ResolutionManager : MonoBehaviour
 {
-    public Dropdown resolutionDropdown; // Reference to the UI Dropdown
+    [SerializeField] Dropdown _resolutionDropdown; // Reference to the UI Dropdown
     private Resolution[] _availableResolutions; // All resolutions supported on this computer
     int _currentResolutionIndex = -1;
 
@@ -23,7 +23,7 @@ public class ResolutionManager : MonoBehaviour
         _availableResolutions = Screen.resolutions;
 
         // Clear any existing options in the dropdown
-        resolutionDropdown.ClearOptions();
+        _resolutionDropdown.ClearOptions();
 
         List<string> options = new List<string>();
 
@@ -46,9 +46,9 @@ public class ResolutionManager : MonoBehaviour
             }            
         }
 
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = CurrentResolution;
-        resolutionDropdown.RefreshShownValue();
+        _resolutionDropdown.AddOptions(options);
+        _resolutionDropdown.value = CurrentResolution;
+        _resolutionDropdown.RefreshShownValue();
     }
    
     /// <summary>

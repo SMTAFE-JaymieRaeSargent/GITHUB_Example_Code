@@ -17,44 +17,36 @@ public class AudioManager : MonoBehaviour
     // UI Text element that will show the volume percentage (e.g., "50%")
     private Text _channelVolumePercent;
 
-    /// <summary>
-    /// Called when selecting which mixer channel to adjust (via button or slider setup).
-    /// Example: "Master", "Music", or "SFX" — must match the exposed parameter name in the mixer.
-    /// </summary>
-    public void CurrentMixer(string name)
+    [SerializeField] Slider[] _slider = new Slider[3];
+    [SerializeField] Text[] _percentText = new Text[3];
+    [SerializeField] float[] _volume = new float[3];
+    [SerializeField] string[] _channelName = new string[3];
+
+    public float[] VolumeControl
     {
-        _mixerChannel = name;
+        set 
+        {
+            _volume = value; 
+        }
+        get { return _volume; }
     }
 
-    /// <summary>
-    /// Called to assign the UI text that will display the volume percent.
-    /// This should be done once before changing volume.
-    /// </summary>
-    public void GetText(Text uiText)
+    private void Start()
     {
-        _channelVolumePercent = uiText;
+        for (int i = 0; i < _volume.Length; i++)
+        {
+            _slider[i].value = VolumeControl[i];
+            audioMixer.SetFloat(_channelName[i], VolumeControl[i]);
+            _percentText[i].text = $"{Mathf.Clamp01((VolumeControl[i] + 80) / 100):P0}";
+
+        }
+
     }
-
-    /// <summary>
-    /// Changes the volume of the currently selected mixer channel.
-    /// Unity mixer values range from -80 (mute) to 20 (max volume).
-    /// </summary>
-    public void ChangeVolume(float volume)
+    
+    public void ChangeVolume(int volumeID)
     {
-        // Set the volume for the selected mixer channel
-        audioMixer.SetFloat(_mixerChannel, volume);
-
-        // Update the UI text to show the new volume percent
-        ChangeTextValue(volume);
-    }
-
-    /// <summary>
-    /// Converts volume from mixer decibel value (-80 to 20) into a percent (0% to 100%),
-    /// then updates the assigned UI text with that percentage.
-    /// </summary>
-    void ChangeTextValue(float volume)
-    {
-        // Convert decibel to a value between 0 and 1, then format as a percent string
-        _channelVolumePercent.text = $"{Mathf.Clamp01((volume + 80) / 100):P0}";
+            VolumeControl[volumeID] = _slider[volumeID].value;
+            audioMixer.SetFloat(_channelName[volumeID], VolumeControl[volumeID]);
+            _percentText[volumeID].text = $"{Mathf.Clamp01((VolumeControl[volumeID] + 80) / 100):P0}";       
     }
 }
