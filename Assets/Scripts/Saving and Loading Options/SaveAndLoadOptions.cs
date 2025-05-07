@@ -1,16 +1,85 @@
 using UnityEngine;
+using System.IO;
+using System;
+
+
+
 
 public class SaveAndLoadOptions : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    string _filePath = $"{Application.dataPath}/OptionsData.json";
+    public OptionSaveData optionsData = new OptionSaveData();
+    [Header("Options Scripts")]
+    [SerializeField] AudioManager _audioManager;
+    [SerializeField] ResolutionManager _resolutionManager;
+    [SerializeField] FullscreenModeManager _fullscreenModeManager;
+    [SerializeField] QualityManager _qualityManager;
+    [SerializeField] CursorSelectManager _cursorSelectManager;
+    [SerializeField] KeybindManager _keybindManager;
+    #region Save
+    /*
+    Function to get data ready to send
+    Function to write data to file
+    Function to run both functions
+     */
+    void GetDataToSave()
     {
-        
-    }
+       optionsData.currentCursor = _cursorSelectManager.CursorIndex;
+       optionsData.isMouseInverted = MouseInvertManager.IsInverted;
+       optionsData.keyNames = _keybindManager.SendKey();
+       optionsData.keyValues = _keybindManager.SendValue();
 
-    // Update is called once per frame
-    void Update()
+        optionsData.fullScreenMode = _fullscreenModeManager.CurrentFullscreenMode;
+        optionsData.resolutionWidth = Screen.currentResolution.width;
+        optionsData.resolutionHeight = Screen.currentResolution.height;
+        optionsData.currentResolutionIndex = _resolutionManager.CurrentResolution; 
+
+        optionsData.qualityLevel = QualitySettings.GetQualityLevel();
+
+    }
+    void SaveJSON(OptionSaveData data)
     {
-        
+        string lineToSave = JsonUtility.ToJson(data);
+        File.WriteAllText(_filePath, lineToSave);
+    }
+    public void SaveOptions()
+    {
+        GetDataToSave();
+        SaveJSON(optionsData);
+    }
+    #endregion
+    #region Load
+    /*
+    Function to read data from file
+    Function to send data to other scripts
+    Function to run both functions
+     */
+    OptionSaveData LoadData()
+    {
+        string loadedData = File.ReadAllText(_filePath);
+        return JsonUtility.FromJson<OptionSaveData>(loadedData);
+    }
+    void SendDataFromLoad()
+    {
+        _cursorSelectManager.CursorIndex = optionsData.currentCursor;
+        MouseInvertManager.IsInverted = optionsData.isMouseInverted;
+        _keybindManager.SetUpLoadedKeys(optionsData.keyNames, optionsData.keyValues);
+        _resolutionManager.CurrentResolution = optionsData.currentResolutionIndex;
+        _fullscreenModeManager.CurrentFullscreenMode = optionsData.fullScreenMode;
+        QualitySettings.SetQualityLevel(optionsData.qualityLevel);
+
+    }
+    public void LoadOptions()
+    {
+        optionsData = LoadData();
+        SendDataFromLoad();
+    }
+    #endregion
+    private void Awake()
+    {
+        if (File.Exists(_filePath))
+        {
+            LoadOptions();
+        }
     }
 }

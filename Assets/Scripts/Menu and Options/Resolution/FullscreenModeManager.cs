@@ -1,32 +1,64 @@
 using UnityEngine;// Grants access to core Unity functionality, including MonoBehaviour, GameObjects, and other Unity-related classes and methods.
+using UnityEngine.UI;
 
-/// <summary>
-/// Handles changing the screen mode (Fullscreen, Windowed, Borderless).
-/// Attach each method to a UI toggle (only one should be active at a time).
-/// </summary>
 public class FullscreenModeManager : MonoBehaviour
 {
-    /// <summary>
-    /// Sets the display to exclusive fullscreen mode.
-    /// </summary>
-    public void SetFullscreenMode()
-    {
-        Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-    }
+    private int _fullscreenMode = 0;
+    [Header("Toggle References")]
+    [SerializeField] Toggle _exclusiveFullscreenToggle;
+    [SerializeField] Toggle _fullscreenWindowToggle;
+    [SerializeField] Toggle _windowedToggle;
 
-    /// <summary>
-    /// Sets the display to windowed mode (resizable window).
-    /// </summary>
-    public void SetWindowedMode()
+    public int CurrentFullscreenMode
     {
-        Screen.fullScreenMode = FullScreenMode.Windowed;
+        set
+        {
+            _fullscreenMode = value;
+        }
+        get { return _fullscreenMode; }
     }
-
-    /// <summary>
-    /// Sets the display to fullscreen window (borderless fullscreen).
-    /// </summary>
-    public void SetBorderlessMode()
+    private void Start()
     {
-        Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+        switch (CurrentFullscreenMode)
+        {
+            case 0:
+                _exclusiveFullscreenToggle.isOn = true;
+
+                break;
+            case 1:
+                _fullscreenWindowToggle.isOn = true;
+
+                break;
+            case 2:
+                _windowedToggle.isOn = true;
+
+                break;
+            default:
+                _exclusiveFullscreenToggle.isOn = true;
+                break;
+        }
+    }
+    public void SetScreenMode(int mode)
+    {
+        CurrentFullscreenMode = mode;
+        switch (CurrentFullscreenMode)
+        {
+            case 0:
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+
+                break;
+            case 1:
+                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+
+                break;
+            case 2:
+                Screen.fullScreenMode = FullScreenMode.Windowed;
+
+                break;
+            default:
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+
+                break;
+        }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic; // Allows use of generic collections like List and Dictionary.
 using UnityEngine; // Grants access to core Unity functionality, including MonoBehaviour, GameObjects, and other Unity-related classes and methods.
 using UnityEngine.UI; // Enables interaction with Unity's built-in UI system (non-TMPro).
-using System; // Provides access to core system functions, including Enum parsing and serialization.
+using System;
 
 /// <summary>
 /// Handles in-game keybinding functionality, including:
@@ -13,7 +13,6 @@ using System; // Provides access to core system functions, including Enum parsin
 public class KeybindManager : MonoBehaviour
 {
     #region Data Structure Definition
-    // ==========================
     /*
      * [Serializable] allows Unity to display this struct in the Inspector
      * and enables data serialization (e.g., saving to files or sending over a network).
@@ -25,11 +24,9 @@ public class KeybindManager : MonoBehaviour
         public Text keycodeDisplay;     // The UI text that displays the assigned key.
         public string defaultKey;       // The default key as a string (e.g., "Space").
     }
-    // ==========================
     #endregion
 
     #region Keybinding Variables
-    // ==========================
     [SerializeField] ActionMapData[] _actionMapData; // Array of actions and their bindings shown in the Inspector.
     [SerializeField] GameObject _currentSelectedKey; // The UI button the player is currently modifying.
     public static Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>(); // Maps action names to KeyCodes.
@@ -37,11 +34,39 @@ public class KeybindManager : MonoBehaviour
     // Colors for visual feedback
     [SerializeField] private Color32 _selectedKey = new Color32(239, 116, 36, 225); // Color when selecting a new key.
     [SerializeField] private Color32 _changedKey = new Color32(39, 171, 249, 225);  // Color after key has been changed.
-    // ==========================
     #endregion
+    public void SetUpLoadedKeys(string[] key, string[] value)
+    {
+        keys.Clear();
+        for (int i = 0; i < key.Length; i++)
+        {
+            keys.Add(key[i], (KeyCode)Enum.Parse(typeof(KeyCode), value[i]));
+        }
+    }
+    public string[] SendKey()
+    {
+        string[] tempKey = new string[keys.Count];
+        int i = 0;
+        foreach (KeyValuePair<string, KeyCode> key in keys)
+        {
+            tempKey[i] = key.Key;
+            i++;
+        }
+        return tempKey;
+    }
+    public string[] SendValue()
+    {
+        string[] tempValue = new string[keys.Count];
+        int i = 0;
+        foreach (KeyValuePair<string, KeyCode> key in keys)
+        {
+            tempValue[i] = key.Value.ToString();
+            i++;
+        }
+        return tempValue;
+    }
 
     #region Initialization
-    // ===================
     /// <summary>
     /// Initializes the keybindings and updates the UI with the current bindings.
     /// This method populates the `keys` dictionary with default key assignments
@@ -61,18 +86,10 @@ public class KeybindManager : MonoBehaviour
             // Update the UI to display the current key
             _actionMapData[i].keycodeDisplay.text = keys[_actionMapData[i].actionName].ToString();
         }
-
-        /*
-         * Summary:
-         * - All default keybindings are loaded into the dictionary.
-         * - The UI reflects those keybindings at startup.
-         */
     }
-    // ===================
     #endregion
 
     #region Change Keybinding
-    // ===================
     /// <summary>
     /// Called when the user clicks a UI button to change a keybinding.
     /// The button's name must match the action name in the dictionary.
@@ -88,11 +105,9 @@ public class KeybindManager : MonoBehaviour
             _currentSelectedKey.GetComponent<Image>().color = _selectedKey;
         }
     }
-    // ===================
     #endregion
 
     #region Listen for Input
-    // ===================
     /// <summary>
     /// OnGUI is called multiple times per frame and used here to detect key presses.
     /// It listens for a key only if a keybinding change is in progress.
@@ -120,6 +135,5 @@ public class KeybindManager : MonoBehaviour
             }
         }
     }
-    // ===================
     #endregion
 }

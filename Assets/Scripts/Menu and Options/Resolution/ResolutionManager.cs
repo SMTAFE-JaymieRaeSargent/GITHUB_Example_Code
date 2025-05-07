@@ -9,44 +9,56 @@ using UnityEngine.UI;// Enables interaction with Unity's built-in UI system, all
 public class ResolutionManager : MonoBehaviour
 {
     public Dropdown resolutionDropdown; // Reference to the UI Dropdown
-    private Resolution[] availableResolutions; // All resolutions supported on this computer
+    private Resolution[] _availableResolutions; // All resolutions supported on this computer
+    int _currentResolutionIndex = -1;
 
+    public int CurrentResolution
+    {
+        set { _currentResolutionIndex = value; }
+        get { return _currentResolutionIndex; }
+    }
     private void Start()
     {
         // Get all supported resolutions from the system
-        availableResolutions = Screen.resolutions;
+        _availableResolutions = Screen.resolutions;
 
         // Clear any existing options in the dropdown
         resolutionDropdown.ClearOptions();
 
         List<string> options = new List<string>();
-        int currentResolutionIndex = 0;
 
         // Format each resolution and add it to the dropdown
-        for (int i = 0; i < availableResolutions.Length; i++)
+        for (int i = 0; i < _availableResolutions.Length; i++)
         {
-            string option = $"{availableResolutions[i].width} x {availableResolutions[i].height}";
-            options.Add(option);
-
-            if (availableResolutions[i].width == Screen.currentResolution.width &&
-                availableResolutions[i].height == Screen.currentResolution.height)
+            string option = $"{_availableResolutions[i].width} x {_availableResolutions[i].height}";
+            if (!options.Contains(option))
             {
-                currentResolutionIndex = i;
+                options.Add(option);
             }
+            if (CurrentResolution == -1)
+            {
+                if (_availableResolutions[i].width == Screen.currentResolution.width &&
+                _availableResolutions[i].height == Screen.currentResolution.height)
+                {
+                    CurrentResolution = i;
+
+                }
+            }            
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
+        resolutionDropdown.value = CurrentResolution;
         resolutionDropdown.RefreshShownValue();
     }
-
+   
     /// <summary>
     /// Sets the screen resolution when an option is selected in the dropdown.
     /// </summary>
     /// <param name="selectedIndex">The index of the selected resolution.</param>
     public void SetResolution(int selectedIndex)
     {
-        Resolution resolution = availableResolutions[selectedIndex];
+        CurrentResolution = selectedIndex;
+        Resolution resolution = _availableResolutions[CurrentResolution];
         // Set resolution while keeping current screen mode
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreenMode);
     }

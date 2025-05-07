@@ -37,7 +37,7 @@ public class AudioManager : MonoBehaviour
 
     /// <summary>
     /// Changes the volume of the currently selected mixer channel.
-    /// Unity mixer values range from -80 (mute) to 0 (max volume).
+    /// Unity mixer values range from -80 (mute) to 20 (max volume).
     /// </summary>
     public void ChangeVolume(float volume)
     {
@@ -49,7 +49,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Converts volume from mixer decibel value (-80 to 0) into a percent (0% to 100%),
+    /// Converts volume from mixer decibel value (-80 to 20) into a percent (0% to 100%),
     /// then updates the assigned UI text with that percentage.
     /// </summary>
     void ChangeTextValue(float volume)
