@@ -92,8 +92,11 @@ public class PersistantAudioAsset : MonoBehaviour
         // Only play if the music source and clip are valid
         if (musicSource != null && clip != null)
         {
+            // Sets the music source audio clip.
             musicSource.clip = clip;
+            //Sets the music source to loop
             musicSource.loop = true;
+            //Plays the music source
             musicSource.Play();
         }
     }

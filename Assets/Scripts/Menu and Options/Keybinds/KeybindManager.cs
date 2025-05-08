@@ -13,10 +13,9 @@ using System;
 public class KeybindManager : MonoBehaviour
 {
     #region Data Structure Definition
-    /*
-     * [Serializable] allows Unity to display this struct in the Inspector
-     * and enables data serialization (e.g., saving to files or sending over a network).
-     */
+    /// <summary>
+    /// Holds information for each action's keybinding.
+    /// </summary>
     [Serializable]
     public struct ActionMapData
     {
@@ -27,7 +26,9 @@ public class KeybindManager : MonoBehaviour
     #endregion
 
     #region Keybinding Variables
+    [Header("Action Mapping")] 
     [SerializeField] ActionMapData[] _actionMapData; // Array of actions and their bindings shown in the Inspector.
+    [Header("UI Feedback")]
     [SerializeField] GameObject _currentSelectedKey; // The UI button the player is currently modifying.
     public static Dictionary<string, KeyCode> keys = new Dictionary<string, KeyCode>(); // Maps action names to KeyCodes.
 
@@ -35,34 +36,58 @@ public class KeybindManager : MonoBehaviour
     [SerializeField] private Color32 _selectedKey = new Color32(239, 116, 36, 225); // Color when selecting a new key.
     [SerializeField] private Color32 _changedKey = new Color32(39, 171, 249, 225);  // Color after key has been changed.
     #endregion
+    /// <summary>
+    /// Sets up the keys from a loaded configuration.
+    /// </summary>
     public void SetUpLoadedKeys(string[] key, string[] value)
     {
+        // Clear the existing key mappings.
         keys.Clear();
-        for (int i = 0; i < key.Length; i++)
+        // Iterate through the key and value arrays to populate the dictionary
+        for (int i = 0; i < key.Length; i++)  
         {
+            // Add the key-value pair to the dictionary. Parse the value into KeyCode.
             keys.Add(key[i], (KeyCode)Enum.Parse(typeof(KeyCode), value[i]));
         }
     }
+    /// <summary>
+    /// Returns the key names as an array as Json Utitity doesnt handle Dictionaries.
+    /// </summary>
     public string[] SendKey()
     {
+        // Create an array to hold the key names.
         string[] tempKey = new string[keys.Count];
+         // Create an int to hold the current array element.
         int i = 0;
+        // Loop through the dictionary to extract key names.
         foreach (KeyValuePair<string, KeyCode> key in keys)
         {
+            // Store the key name in the array.
             tempKey[i] = key.Key;
+            // Move to the next index.
             i++;
         }
+        // Return the key names.
         return tempKey;
     }
+    /// <summary>
+    /// Returns the key values as an array.
+    /// </summary>
     public string[] SendValue()
     {
+        // Create an array to hold the key values.
         string[] tempValue = new string[keys.Count];
+        // Create an int to hold the current array element.
         int i = 0;
+        // Loop through the dictionary to extract key values.
         foreach (KeyValuePair<string, KeyCode> key in keys)
         {
+            // Store the key value (KeyCode) as a string in the array.
             tempValue[i] = key.Value.ToString();
+            // Move to the next index.
             i++;
         }
+        // Return the key values.
         return tempValue;
     }
 
@@ -77,13 +102,14 @@ public class KeybindManager : MonoBehaviour
         // Loop through each action in the keybinding array
         for (int i = 0; i < _actionMapData.Length; i++)
         {
-            // Convert default key string to actual KeyCode and store it in the dictionary
+            // Check if the action is already in the dictionary
             if (!keys.ContainsKey(_actionMapData[i].actionName))
             {
+                // Add the action with its default key if not already in the dictionary
                 keys.Add(_actionMapData[i].actionName, (KeyCode)Enum.Parse(typeof(KeyCode), _actionMapData[i].defaultKey));
             }
 
-            // Update the UI to display the current key
+            // Update the UI to display the current key (show the assigned key in the text component)
             _actionMapData[i].keycodeDisplay.text = keys[_actionMapData[i].actionName].ToString();
         }
     }
@@ -102,6 +128,7 @@ public class KeybindManager : MonoBehaviour
         // Visually indicate it's ready for key input
         if (_currentSelectedKey != null)
         {
+            // Change the button color to indicate selection
             _currentSelectedKey.GetComponent<Image>().color = _selectedKey;
         }
     }
@@ -114,9 +141,11 @@ public class KeybindManager : MonoBehaviour
     /// </summary>
     private void OnGUI()
     {
-        Event changeKeyEvent = Event.current; // Get the current UI/input event
+        // Get the current UI/input event
+        Event changeKeyEvent = Event.current; 
 
-        if (_currentSelectedKey != null && changeKeyEvent.isKey)
+        // Check if there's a button selected and the event is a key press
+        if (_currentSelectedKey != null && changeKeyEvent.isKey) 
         {
             // Only continue if the key isn't already assigned
             if (!keys.ContainsValue(changeKeyEvent.keyCode))
