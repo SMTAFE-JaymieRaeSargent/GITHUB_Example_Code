@@ -11516,7 +11516,7 @@ MonoBehaviour:
   - {fileID: 716505262}
   - {fileID: 1666989470}
   - {fileID: 845357271}
-  _volume: 000000000000000000000000
+  _volume: []
   _channelName:
   - Master
   - Music
@@ -11562,7 +11562,7 @@ MonoBehaviour:
     resolutionWidth: 0
     resolutionHeight: 0
     currentResolutionIndex: 0
-    volume: 
+    volume: []
     qualityLevel: 0
     keyNames: []
     keyValues: []

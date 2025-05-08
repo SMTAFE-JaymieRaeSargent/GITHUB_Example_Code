@@ -16,7 +16,17 @@ public class SaveAndLoadOptions : MonoBehaviour
     [SerializeField] QualityManager _qualityManager;
     [SerializeField] CursorSelectManager _cursorSelectManager;
     [SerializeField] KeybindManager _keybindManager;
-    #region Save
+
+
+    private void Awake()
+    {      
+        if (File.Exists(_filePath))
+        {
+            LoadOptions();
+        }
+    }
+  
+    #region Save Options  
     /*
     Function to get data ready to send
     Function to write data to file
@@ -38,16 +48,16 @@ public class SaveAndLoadOptions : MonoBehaviour
 
         optionsData.volume = _audioManager.VolumeControl;
 
-    }
-    void SaveJSON(OptionSaveData data)
+    }   
+    void SaveJSON(OptionSaveData data, string path)
     {
         string lineToSave = JsonUtility.ToJson(data);
-        File.WriteAllText(_filePath, lineToSave);
+        File.WriteAllText(path, lineToSave);
     }
     public void SaveOptions()
     {
         GetDataToSave();
-        SaveJSON(optionsData);
+        SaveJSON(optionsData,_filePath);
     }
     #endregion
     #region Load
@@ -76,34 +86,5 @@ public class SaveAndLoadOptions : MonoBehaviour
         optionsData = LoadData();
         SendDataFromLoad();
     }
-    #endregion
-    private void Awake()
-    {
-        if (File.Exists(_filePath))
-        {
-            LoadOptions();
-        }
-    }
-    public static void LoadOptionsGlobal()
-    {
-        if (File.Exists($"{Application.dataPath}/OptionsData.json"))
-        {
-            OptionSaveData tempData = new OptionSaveData();
-            string loadedData = File.ReadAllText($"{Application.dataPath}/OptionsData.json");
-            tempData = JsonUtility.FromJson<OptionSaveData>(loadedData);
-            for (int i = 0; i < tempData.keyNames.Length; i++)
-            {
-                KeybindManager.keys.Add(tempData.keyNames[i], (KeyCode)Enum.Parse(typeof(KeyCode), tempData.keyValues[i]));
-            }
-            MouseInvertManager.IsInverted = tempData.isMouseInverted;
-        }
-        //else if (File.Exists($"{Application.dataPath}/DefaultControls.json"))
-        //{
-        //    for (int i = 0; i < tempData.keyNames.Length; i++)
-        //    {
-        //        KeybindManager.keys.Add(tempData.keyNames[i], (KeyCode)Enum.Parse(typeof(KeyCode), tempData.keyValues[i]));
-        //    }
-        //    MouseInvertManager.IsInverted = tempData.isMouseInverted;
-        //}
-    }
+    #endregion   
 }
