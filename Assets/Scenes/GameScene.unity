@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 5517045}
   m_Layer: 0
   m_Name: Manager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1967,8 +1967,8 @@ MonoBehaviour:
       maxValue: 100
       value: 1
     stamina:
-      currentValue: 100
-      maxValue: 100
+      currentValue: 10
+      maxValue: 10
       value: 1
     level: 1
     experience:
@@ -2043,6 +2043,7 @@ MonoBehaviour:
   _crouch: 2.5
   _jump: 8
   _gravity: 20
+  uiManager: {fileID: 0}
 --- !u!1 &1674834358
 GameObject:
   m_ObjectHideFlags: 0

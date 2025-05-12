@@ -7,6 +7,7 @@ TagManager:
   - Heal
   - SpawnPoint
   - Damage
+  - GameManager
   layers:
   - Default
   - TransparentFX
