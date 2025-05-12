@@ -225,7 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 12380273}
   m_Layer: 6
-  m_Name: First Person Parent
+  m_Name: First Person Snap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1944,6 +1944,7 @@ GameObject:
   - component: {fileID: 1655318751}
   - component: {fileID: 1655318752}
   - component: {fileID: 1655318753}
+  - component: {fileID: 1655318754}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2140,6 +2141,29 @@ MonoBehaviour:
   _jump: 8
   _gravity: 20
   uiManager: {fileID: 0}
+--- !u!114 &1655318754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1655318746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4f8520edab60c489bccc4cd47d26fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationClamp: {x: -60, y: 60}
+  transitionSpeed: 5
+  isLerping: 0
+  minZoom: 0
+  maxZoom: 5
+  zoomSpeed: 2
+  playerCamera: {fileID: 961739753}
+  player: {fileID: 1655318750}
+  firstPersonSnap: {fileID: 12380273}
+  thirdPersonSnap: {fileID: 770645868}
+  thirdPersonParent: {fileID: 941743330}
 --- !u!1 &1674834358
 GameObject:
   m_ObjectHideFlags: 0
