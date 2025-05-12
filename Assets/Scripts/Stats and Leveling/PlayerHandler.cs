@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;// Allows use of generic collections like List and Dictionary.
 
 public class PlayerHandler : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class PlayerHandler : MonoBehaviour
     [SerializeField] Transform spawnPoint;
     [SerializeField] float timerValue;
     [SerializeField] bool canHeal = true;
+    private List<string> hitTags = new List<string>();
+    private List<string> currentHitTags = new List<string>();
 
     public UIManager uiManager;
 
@@ -45,7 +48,7 @@ public class PlayerHandler : MonoBehaviour
     }
     private void Start()
     {
-       
+
         uiManager.UpdateUI(uiManager.healthBar, playerData.health.currentValue, playerData.health.maxValue);
         uiManager.UpdateUI(uiManager.staminaBar, playerData.stamina.currentValue, playerData.stamina.maxValue);
         uiManager.UpdateUI(uiManager.experienceBar, playerData.experience.currentValue, playerData.experience.maxValue);
@@ -57,7 +60,7 @@ public class PlayerHandler : MonoBehaviour
         {
             playerData.health.value *= 2;
         }
-        
+
     }
     private void OnTriggerExit(Collider other)
     {
@@ -70,12 +73,35 @@ public class PlayerHandler : MonoBehaviour
             spawnPoint = other.transform;
         }
     }
-    private void OnCollisionEnter(Collision collision)
-    {
 
-        if (collision.gameObject.CompareTag("Damage"))
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        currentHitTags.Add(hit.gameObject.tag);
+
+        if (hit.gameObject.CompareTag("Damage") && !hitTags.Contains(hit.gameObject.tag))
         {
+            Debug.Log("Hit damage");
             DamagePlayer(10);
+            hitTags.Add(hit.gameObject.tag);
         }
+    }
+    private void LateUpdate()
+    {
+        int i = 0;
+        if (currentHitTags.Count > 0)
+        {
+            foreach (string tag in currentHitTags)
+            {
+                if (hitTags.Contains(tag))
+                {
+                    i = 1;
+                }
+            }
+        }
+        if (i == 0)
+        {
+            hitTags.Clear();
+        }
+        currentHitTags.Clear();
     }
 }
