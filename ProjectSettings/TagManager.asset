@@ -7,6 +7,7 @@ TagManager:
   - Heal
   - SpawnPoint
   - Damage
+  - GameManager
   layers:
   - Default
   - TransparentFX
@@ -14,7 +15,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
