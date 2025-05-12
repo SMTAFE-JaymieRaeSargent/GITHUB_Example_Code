@@ -128,6 +128,12 @@ public class PlayerHandler : MonoBehaviour
             // Double the healing rate while inside the Heal trigger
             playerData.health.value *= 2;
         }
+        // Check if the other object the player collided with has the tag "SpawnPoint"
+        if (other.tag == "SpawnPoint")
+        {
+            // Update the player's spawn point to the exited collider's transform
+            spawnPoint = other.transform;
+        }
     }
 
     /// <summary>
@@ -142,13 +148,7 @@ public class PlayerHandler : MonoBehaviour
         {
             // Reset the healing rate when leaving the Heal trigger
             playerData.health.value /= 2;
-        }
-        // Check if the other object the player collided with has the tag "SpawnPoint"
-        if (other.tag == "SpawnPoint")
-        {
-            // Update the player's spawn point to the exited collider's transform
-            spawnPoint = other.transform;
-        }
+        }        
     }
 
     /// <summary>
