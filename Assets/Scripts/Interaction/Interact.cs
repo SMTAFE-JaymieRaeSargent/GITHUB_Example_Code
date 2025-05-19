@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Interact : MonoBehaviour
 {
+    public Text toolTip;
     void Update()
     {
         // create a ray (a Ray is ?? a beam, line that comes into contact with colliders)
@@ -13,6 +15,10 @@ public class Interact : MonoBehaviour
         //if this physics ray that gets cast in a direction hits a object withing our distance and or layer
         if (Physics.Raycast(interactionRay, out hitInfo, 10))
         {
+            if (hitInfo.collider.TryGetComponent<IInteractable>(out IInteractable displayToolTip))
+            {
+                toolTip.text = displayToolTip.ToolTip();
+            }
             //if our interaction button or key is pressed
             if (Input.GetKeyDown(KeybindManager.keys["Interact"]))
             {
@@ -22,6 +28,13 @@ public class Interact : MonoBehaviour
                     // Run the OnInteraction function
                     interact.OnInteraction();
                 }
+            }
+        }
+        else 
+        {
+            if (toolTip.text != "")
+            {
+                toolTip.text = "";
             }
         }
     }

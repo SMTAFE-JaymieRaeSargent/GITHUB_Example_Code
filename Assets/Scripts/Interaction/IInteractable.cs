@@ -3,6 +3,7 @@ public interface IInteractable
 {
     //void OnInteraction(): This is a method that any class implementing IInteractable must define.
     void OnInteraction();
+    string ToolTip();
 }
 #region What is an Interface in C#?
 /*
