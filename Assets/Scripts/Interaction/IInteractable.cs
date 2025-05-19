@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public class IInteractable
+public interface IInteractable
 {
-    
+    void OnInteraction();
 }
