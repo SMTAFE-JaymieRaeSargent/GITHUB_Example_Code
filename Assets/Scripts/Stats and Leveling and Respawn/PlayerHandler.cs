@@ -107,7 +107,14 @@ public class PlayerHandler : MonoBehaviour
         }
         else
         {
-
+            playerObject.GetComponent<CharacterController>().enabled = false;
+            playerObject.transform.position = spawnPoint.position;
+            playerData.health.currentValue = playerData.health.maxValue;
+            playerData.stamina.currentValue = playerData.stamina.maxValue;
+            canHeal = true;
+            uiManager.UpdateUI(uiManager.healthBar, playerData.health.currentValue, playerData.health.maxValue);
+            uiManager.UpdateUI(uiManager.staminaBar, playerData.stamina.currentValue, playerData.stamina.maxValue);
+            playerObject.GetComponent <CharacterController>().enabled = true;
         }
 
     }
@@ -221,6 +228,7 @@ public class PlayerHandler : MonoBehaviour
 
         // Clear the currentHitTags list for the next frame to ensure fresh processing
         currentHitTags.Clear();
+        Respawn();
     }
 
     /// <summary>
