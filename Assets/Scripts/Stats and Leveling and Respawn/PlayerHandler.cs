@@ -128,7 +128,8 @@ public class PlayerHandler : MonoBehaviour
         uiManager.UpdateUI(uiManager.healthBar, playerData.health.currentValue, playerData.health.maxValue);
         uiManager.UpdateUI(uiManager.staminaBar, playerData.stamina.currentValue, playerData.stamina.maxValue);
         uiManager.UpdateUI(uiManager.experienceBar, playerData.experience.currentValue, playerData.experience.maxValue);
-        playerObject = GameObject.FindGameObjectWithTag("Player");
+        playerObject = GameObject.FindGameObjectWithTag("Player"); 
+
     }
 
     /// <summary>
