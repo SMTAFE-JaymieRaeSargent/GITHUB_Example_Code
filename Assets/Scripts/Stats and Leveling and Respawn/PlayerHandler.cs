@@ -30,6 +30,7 @@ public class PlayerHandler : MonoBehaviour
     // Reference to the UI manager that handles UI updates
     public UIManager uiManager;
 
+    public GameObject playerObject;
     #endregion
 
     #region Public Methods
@@ -98,6 +99,26 @@ public class PlayerHandler : MonoBehaviour
         }
     }
 
+    void Respawn()
+    {
+        if (playerData.health.currentValue > 0)
+        {
+            return;
+        }
+        else
+        {
+            playerObject.GetComponent<CharacterController>().enabled = false;
+            playerObject.transform.position = spawnPoint.position;
+            playerData.health.currentValue = playerData.health.maxValue;
+            playerData.stamina.currentValue = playerData.stamina.maxValue;
+            canHeal = true;
+            uiManager.UpdateUI(uiManager.healthBar, playerData.health.currentValue, playerData.health.maxValue);
+            uiManager.UpdateUI(uiManager.staminaBar, playerData.stamina.currentValue, playerData.stamina.maxValue);
+            playerObject.GetComponent <CharacterController>().enabled = true;
+        }
+
+    }
+
     #endregion
 
     #region Unity Callbacks
@@ -114,6 +135,8 @@ public class PlayerHandler : MonoBehaviour
         uiManager.UpdateUI(uiManager.healthBar, playerData.health.currentValue, playerData.health.maxValue);
         uiManager.UpdateUI(uiManager.staminaBar, playerData.stamina.currentValue, playerData.stamina.maxValue);
         uiManager.UpdateUI(uiManager.experienceBar, playerData.experience.currentValue, playerData.experience.maxValue);
+        playerObject = GameObject.FindGameObjectWithTag("Player"); 
+
     }
 
     /// <summary>
@@ -205,6 +228,7 @@ public class PlayerHandler : MonoBehaviour
 
         // Clear the currentHitTags list for the next frame to ensure fresh processing
         currentHitTags.Clear();
+        Respawn();
     }
 
     /// <summary>
